@@ -12,7 +12,7 @@ library(shiny)
 # api token: 064b143dbfe6e294acfda1803caae634f6981273
 riingo_set_token('064b143dbfe6e294acfda1803caae634f6981273')
 start_day <- "2020-01-01"
-ticker <- (c("GME", "AMC", "NOK", "SNDL"))
+ticker <- (c("GME", "AMC", "NOK", "SNDL", "SPCE", "KOSS", 'JAGX', "ZOM", "EXPR"))
 market_stats <- (c("close", "high", "low", "open", "volume"))
 
 ui <- fluidPage(
@@ -37,6 +37,7 @@ ui <- fluidPage(
                       value = today(),
                       min = "2020-01-02",
                       max = today()),
+            textOutput("summaryText"),
             tableOutput("summaryTable")
             
         ),
@@ -117,7 +118,7 @@ server <- function(input, output) {
         start_date = input$start
         end_date = input$end
         
-        paste("You have selected the time series plot of", input$stock, "for daily market", input$stat)
+        paste("You have selected the time series of", input$stock, "for daily market", input$stat)
         
     })
     output$text2 <- renderText({
@@ -127,6 +128,14 @@ server <- function(input, output) {
         end_date = input$end
         
         paste("Table of", symbol, "values for given market statistics")
+    })
+    output$summaryText <- renderText({
+        symbol = input$stock
+        mkt_stat = input$stat
+        start_date = input$start
+        end_date = input$end
+        
+        paste("Summary statistics of", mkt_stat, "for", symbol)
     })
 }
 
