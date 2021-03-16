@@ -13,8 +13,8 @@ library(bslib)
 # api token: 064b143dbfe6e294acfda1803caae634f6981273
 riingo_set_token('064b143dbfe6e294acfda1803caae634f6981273')
 start_day <- "2020-01-01"
-ticker <- (c("GME", "AMC", "NOK", "SNDL", "SPCE", "KOSS", 'JAGX', "ZOM", "EXPR", "NIO", "TSLA", "QS",
-             "OCGN", "SENS", "QS", "ANCN", "HEAR", "ONLN", "SSY"))
+ticker <- (sort(c("GME", "AMC", "NOK", "SNDL", "SPCE", "KOSS", 'JAGX', "ZOM", "EXPR", "NIO", "TSLA", "QS",
+             "OCGN", "SENS", "QS", "ANCN", "HEAR", "ONLN", "SSY", "LEGO", "AAPL")))
 market_stats <- (c("close", "high", "low", "open", "volume"))
 
 ui <- fluidPage(
@@ -153,6 +153,7 @@ server <- function(input, output) {
               change as my portfolio changes sizes, I would just need to add or take out stock symbols in the source code. For my personal portfolio this is helpful. If able to track all symbols, which isn't allowed by the API this could be applicable to any user to monitor certain stocks. 
               Happy trading.")
     })
+    
 }
 
 # Run the application 
