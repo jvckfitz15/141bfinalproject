@@ -8,25 +8,28 @@ library(jsonlite)
 library(usethis)
 library(ggplot2)
 library(shiny)
+library(bslib)
 # url: 'https://api.tiingo.com'
 # api token: 064b143dbfe6e294acfda1803caae634f6981273
 riingo_set_token('064b143dbfe6e294acfda1803caae634f6981273')
 start_day <- "2020-01-01"
-ticker <- (c("GME", "AMC", "NOK", "SNDL", "SPCE", "KOSS", 'JAGX', "ZOM", "EXPR"))
+ticker <- (c("GME", "AMC", "NOK", "SNDL", "SPCE", "KOSS", 'JAGX', "ZOM", "EXPR", "NIO", "TSLA", "QS",
+             "OCGN", "SENS", "QS", "ANCN", "HEAR", "ONLN", "SSY"))
 market_stats <- (c("close", "high", "low", "open", "volume"))
 
 ui <- fluidPage(
     
+    theme = bs_theme(version = 4, bootswatch = "darkly"),
     # Application title
-    titlePanel("Stonks"),
+    titlePanel("Time Series Analysis of Personal Portfolio"),
     
     # Sidebar with a slider input for number of bins 
     sidebarLayout(
         sidebarPanel(
-            selectInput('stock', "Select Stock name",
+            selectInput('stock', "Select Stock Symbol",
                         choices = ticker,
                         selected = ticker[1]),
-            selectInput('stat', 'Select Market Data',
+            selectInput('stat', 'Select Desired Market Data',
                         choices = market_stats,
                         selected = market_stats[1]),
             dateInput('start', "Choose Start Date",
@@ -95,8 +98,6 @@ server <- function(input, output) {
         chosen_period <- chosen_stock_data[chosen_stock_data$date<end_date,]
         
         
-        
-        
     })
     
     output$summaryTable <- renderTable({
@@ -144,12 +145,13 @@ server <- function(input, output) {
         paste("Summary statistics of", mkt_stat, "for", symbol)
     })
     output$readmeText <- renderText({
-        print("This is an app designed to track certain market statistics for my specific portfolio. This app is mainly useful to myself only but if the API allowed so it would be possible to use this app for all stock symbols in the market.
-              The market statistics used in this application are market close, high, low, open, and volume. Once you have chosen a stock symbol, and then select one of the statistics you will then have output in the main panel.
-              This output will be a time series of the stock for tha statistic starting from 01/01/2020 and ending on the current days date. From here you may change the dates to select a certain period of the data and the graph will change.
-              Additionally, once you have selected a stock symbol, a complete data table with all of the possible market statistics for that date date range and symbol will be displayed.
+        print("This is an app designed to track certain market statistics for my specific portfolio. This app is mainly useful to myself only but if the API allowed so, it would be possible to use this app for all stock symbols in the market.
+              The market statistics used in this application are market close, high, low, open, and volume. Once you have chosen a stock symbol, and then selected one of the statistics you will then have output in the main panel.
+              This output will be a time series of the stock for that statistic starting from 01/01/2020 and ending on the current days date. From here you may change the dates to select a certain period of the data and the graph will change.
+              Additionally, once you have selected a stock symbol, a complete data table with all of the possible market statistics for that date range and symbol will be displayed.
               The final piece of output will display under the choices in the side panel, and this will display summary statistics for that stock, and market statistic that has been chosen, over the chosen time period. In order to change the list to
-              change as my portfolio changes sizes, I would just need to add or take out stock symbols in the source code. For my personal portfolio this is helpful. If able to track all symbols, which isn't allowed by the API this could be applicable to any user to monitor certain stocks.")
+              change as my portfolio changes sizes, I would just need to add or take out stock symbols in the source code. For my personal portfolio this is helpful. If able to track all symbols, which isn't allowed by the API this could be applicable to any user to monitor certain stocks. 
+              Happy trading.")
     })
 }
 
