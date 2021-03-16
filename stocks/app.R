@@ -42,16 +42,22 @@ ui <- fluidPage(
             
         ),
         
-        # Show a plot of the generated distribution
-        mainPanel(textOutput("text1"),
-                  plotOutput("distPlot"),
-                  textOutput("text2"),
-                  tableOutput("table1")
+        # Show plots, text and tables in main panel
+        # use tabPanel to create a readme tab for users
+        mainPanel(
+            tabsetPanel(
+                tabPanel(title = "Main", textOutput("text1"),
+                         plotOutput("distPlot"),
+                         textOutput("text2"),
+                         tableOutput("table1")),
+                tabPanel(title = "READ ME", textOutput('readmeText'))
+            )
+            
         )
     )
 )
 
-# Define server logic required to draw a histogram
+# Define server logic required to create necessary plots, tables and text
 server <- function(input, output) {
     
     output$distPlot <- renderPlot({
@@ -136,6 +142,14 @@ server <- function(input, output) {
         end_date = input$end
         
         paste("Summary statistics of", mkt_stat, "for", symbol)
+    })
+    output$readmeText <- renderText({
+        print("This is an app designed to track certain market statistics for my specific portfolio. This app is mainly useful to myself only but if the API allowed so it would be possible to use this app for all stock symbols in the market.
+              The market statistics used in this application are market close, high, low, open, and volume. Once you have chosen a stock symbol, and then select one of the statistics you will then have output in the main panel.
+              This output will be a time series of the stock for tha statistic starting from 01/01/2020 and ending on the current days date. From here you may change the dates to select a certain period of the data and the graph will change.
+              Additionally, once you have selected a stock symbol, a complete data table with all of the possible market statistics for that date date range and symbol will be displayed.
+              The final piece of output will display under the choices in the side panel, and this will display summary statistics for that stock, and market statistic that has been chosen, over the chosen time period. In order to change the list to
+              change as my portfolio changes sizes, I would just need to add or take out stock symbols in the source code. For my personal portfolio this is helpful. If able to track all symbols, which isn't allowed by the API this could be applicable to any user to monitor certain stocks.")
     })
 }
 
